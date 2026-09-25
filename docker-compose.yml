@@ -1,0 +1,74 @@
+# ---------------------------------------------------------------------
+# Local "mini cloud": the same architecture as production, on your PC.
+#
+#   db       PostgreSQL 16      -> stands in for Supabase / Neon / AWS RDS
+#   storage  MinIO (S3 API)     -> stands in for AWS S3 / Supabase Storage / R2
+#   api      FastAPI container  -> stands in for Render / App Runner / Cloud Run
+#
+#   docker compose up --build
+#   docker compose exec api python -m backend.seed
+#
+# Then run the frontend with `npm run dev` (VITE_API_URL=http://localhost:8000).
+# MinIO console: http://localhost:9001  (user/password below - local only)
+# ---------------------------------------------------------------------
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: portal
+      POSTGRES_USER: portal
+      POSTGRES_PASSWORD: portal-local-only
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portal -d portal"]
+      interval: 5s
+      retries: 10
+
+  storage:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: portal-minio
+      MINIO_ROOT_PASSWORD: portal-minio-local-only
+    ports: ["9000:9000", "9001:9001"]
+    volumes: [miniodata:/data]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      retries: 10
+
+  # One-off job: create the private bucket.
+  create-bucket:
+    image: minio/mc:latest
+    depends_on:
+      storage: { condition: service_healthy }
+    entrypoint: >
+      sh -c "mc alias set local http://storage:9000 portal-minio portal-minio-local-only &&
+             mc mb --ignore-existing local/assignment-submissions &&
+             mc anonymous set none local/assignment-submissions"
+
+  api:
+    build: .
+    depends_on:
+      db: { condition: service_healthy }
+      create-bucket: { condition: service_completed_successfully }
+    ports: ["8000:8000"]
+    environment:
+      ENVIRONMENT: development
+      SECRET_KEY: ${SECRET_KEY:-local-docker-secret-change-me-0123456789abcdef}
+      DATABASE_URL: postgresql://portal:portal-local-only@db:5432/portal
+      STORAGE_PROVIDER: s3
+      S3_BUCKET: assignment-submissions
+      S3_REGION: us-east-1
+      S3_ENDPOINT_URL: http://storage:9000
+      S3_PUBLIC_ENDPOINT_URL: http://localhost:9000
+      S3_ACCESS_KEY_ID: portal-minio
+      S3_SECRET_ACCESS_KEY: portal-minio-local-only
+      CORS_ORIGINS: http://localhost:5173
+      PUBLIC_API_URL: http://localhost:8000
+      SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-Demo@12345}
+
+volumes:
+  pgdata:
+  miniodata:
