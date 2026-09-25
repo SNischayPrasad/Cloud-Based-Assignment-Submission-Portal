@@ -1,0 +1,20 @@
+# ---- Web framework / API ----
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30
+python-multipart>=0.0.12        # multipart/form-data file uploads
+email-validator>=2.2            # EmailStr validation
+
+# ---- Database (SQLite locally, PostgreSQL in the cloud) ----
+SQLAlchemy>=2.0.36,<3.0
+psycopg2-binary>=2.9.10         # PostgreSQL driver (Supabase / Neon / RDS)
+
+# ---- Authentication ----
+bcrypt>=4.2                     # password hashing
+PyJWT>=2.9                      # JWT access tokens
+
+# ---- Object storage ----
+boto3>=1.35                     # S3-compatible storage (AWS S3, Supabase Storage, R2, MinIO)
+
+# ---- Config / serverless ----
+python-dotenv>=1.0
+mangum>=0.19                    # optional: run the same app on AWS Lambda
