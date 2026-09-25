@@ -32,4 +32,12 @@ Put your PNG screenshots in this folder using exactly these names so the README 
 | 26 | `26_github_repository.png` | Repo homepage: description, topics, green CI badge | Professional repo |
 | 27 | `27_readme_preview.png` | Rendered README | Documentation quality |
 
+## Capture notes
+
+* 01–22 and 25–27 were captured automatically from the running app (headless Microsoft Edge at 1440×900, light theme) and from the public GitHub repository.
+* `12_cloud_storage_file.png` and `13_database_submission_record.png` are views generated from the **real** `storage_data/` folder and `portal.db` table at capture time. Once deployed, you can replace them with the Supabase Storage bucket and Supabase table editor.
+* `22_automated_tests.png` is the real output of `pytest -vv`, rendered as a terminal page.
+* `17_teacher_reviewing_file.png` shows the PDF opened through a signed URL. A headless browser has no address bar, so retake it in a normal browser if you want the `signature=` parameter visible.
+* **Still to do:** `23_cloud_deployment_dashboard.png` and `24_live_application.png` need the Render/Vercel deployment ([docs/09-cloud-deployment.md](../docs/09-cloud-deployment.md)).
+
 Tips: Windows `Win + Shift + S`, macOS `Cmd + Shift + 4`. Use a 1366×768 or 1440×900 browser window for consistent images, and take a light-mode and dark-mode shot of the dashboards if you like.

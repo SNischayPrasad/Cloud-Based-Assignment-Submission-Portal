@@ -420,11 +420,19 @@ The API is stateless, so it scales horizontally behind a load balancer. The data
 
 ## Screenshots
 
-Put your screenshots in [`screenshots/`](screenshots) using the names in [screenshots/README.md](screenshots/README.md) (27 required shots with what each proves). Suggested gallery:
+Captured from the running application with fictional demo data. The full set, and what each image proves, is in [screenshots/](screenshots/README.md).
 
-| Login | Student dashboard | Teacher review |
-|---|---|---|
-| `screenshots/03_login_page.png` | `screenshots/07_student_dashboard.png` | `screenshots/18_marks_and_feedback.png` |
+| Teacher dashboard | Student dashboard |
+|---|---|
+| ![Teacher dashboard](screenshots/05_teacher_dashboard.png) | ![Student dashboard](screenshots/07_student_dashboard.png) |
+| **Upload stored in object storage** | **Late submission (server-side deadline)** |
+| ![Successful upload](screenshots/11_successful_upload.png) | ![Late submission](screenshots/15_late_submission_demo.png) |
+| **Teacher grading (marks ≤ max enforced)** | **Student sees marks + feedback** |
+| ![Marks and feedback](screenshots/18_marks_and_feedback.png) | ![Student feedback](screenshots/19_student_feedback_page.png) |
+| **Object storage key layout** | **Metadata row in the database** |
+| ![Object storage](screenshots/12_cloud_storage_file.png) | ![Database record](screenshots/13_database_submission_record.png) |
+| **Role-based access: student blocked from teacher page** | **67 automated tests passing** |
+| ![Authorization error](screenshots/20_authorization_error_demo.png) | ![Automated tests](screenshots/22_automated_tests.png) |
 
 ## Results
 
