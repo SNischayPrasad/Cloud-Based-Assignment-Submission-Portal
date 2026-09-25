@@ -1,0 +1,8 @@
+# Normalize text files to LF in the repository
+* text=auto
+# Binary files: never convert line endings
+*.pdf binary
+*.png binary
+*.jpg binary
+*.exe binary
+*.zip binary
