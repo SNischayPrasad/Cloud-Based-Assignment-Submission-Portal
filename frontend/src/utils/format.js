@@ -32,6 +32,15 @@ export function relativeTime(iso) {
   return relative.format(Math.round(diffMs / day), 'day');
 }
 
+/** How long after `fromIso` the time `toIso` is, e.g. "9 h 7 min" or "2 days". */
+export function durationBetween(fromIso, toIso) {
+  const minutes = Math.max(0, Math.round((new Date(toIso) - new Date(fromIso)) / 60000));
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 48) return `${hours} h ${minutes % 60} min`;
+  return `${Math.round(hours / 24)} days`;
+}
+
 export function hoursUntil(iso) {
   return (new Date(iso).getTime() - Date.now()) / (60 * 60 * 1000);
 }

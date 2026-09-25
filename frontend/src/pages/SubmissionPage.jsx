@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import useLoad from '../hooks/useLoad';
 import { getErrorMessage } from '../services/api';
 import { openSubmissionFile, submissionService } from '../services/submissionService';
-import { courseTone, formatBytes, formatDateTime, formatMarks, relativeTime } from '../utils/format';
+import { courseTone, durationBetween, formatBytes, formatDateTime, formatMarks } from '../utils/format';
 
 /** One submission: file + metadata, and either the grading form (teacher) or the feedback (student). */
 export default function SubmissionPage() {
@@ -22,7 +22,7 @@ export default function SubmissionPage() {
     setFileError('');
     openSubmissionFile(submission.submission_id, disposition).catch((err) => setFileError(getErrorMessage(err)));
   };
-  const lateBy = submission.is_late ? relativeTime(submission.deadline).replace('ago', 'late') : null;
+  const lateBy = submission.is_late ? `${durationBetween(submission.deadline, submission.submitted_at)} late` : null;
 
   return (
     <>
